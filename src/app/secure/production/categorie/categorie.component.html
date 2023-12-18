@@ -1,0 +1,129 @@
+<div class="container bg-white   d-flex justify-content-center align-items-center" style="height:100vh ;">
+  <div class="card w-100">
+    <div class="card-body">
+
+      <div class="row">
+        <div class="col-3 offset-9">
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault"
+            (change)="onChangeMode(checkMode)" #checkMode >
+            <label class="form-check-label" for="flexSwitchCheckDefault">
+              {{ mode }}</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div *ngIf="editingCategory !== null ">
+          <form (ngSubmit)="updateCategory()" class="d-flex justify-content-around">
+            <div class="col-8">
+              <div class="mb-3">
+                <label for="" class="form-label">Categorie</label>
+                <input [(ngModel)]="editingCategory.libelle"  placeholder="Libellé de la catégorie" type="text"
+                 name="libelle" id="" class="form-control" >
+              </div>
+              <div class="mb-3">
+                <label  for="" class="form-label">Unite</label>
+                <input *ngFor="let u of  editingCategory.unite" [(ngModel)]="u.libelle" type="text"  class="form-control" name="uniteLibelle" >
+              </div>
+            </div>
+            <div class="col-2">
+              <div class="mb-3">
+                <label for=""  class="form-label text-white">Modifier</label>
+                <button type="submit" name="" id="" class="form-control btn btn-primary"  placeholder="" aria-describedby="helpId">Modifer</button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <form *ngIf="editingCategory == null " novalidate class="d-flex justify-content-around" (ngSubmit)="storeCategorieUnite(saveForm)" #saveForm="ngForm" >
+          <div class="col-8">
+            <div class="mb-3">
+              <label for="" class="form-label">Categorie</label>
+              <input [(ngModel)]="libelle"  placeholder="Libellé de la catégorie" type="text"
+               name="libelle" id="" class="form-control" #Libelle="ngModel"
+               minlength="3" required [ngClass]="{'is-invalid': Libelle.touched && !Libelle.valid}">
+               <div class="invalid-feedback">
+                <span *ngIf="Libelle.hasError('required')">
+                  Libelle Obligatoire
+                </span>
+                <span *ngIf="Libelle.hasError('minlength')">
+                  Entrer au minimum 3 caracteres
+                </span>
+               </div>
+            </div>
+            <div class="mb-3">
+              <label  for="" class="form-label">Unite</label>
+              <input [(ngModel)]="uniteLibelle" type="text"  class="form-control"
+              placeholder="Libellé de l'unité" name="uniteLibelle"
+              #Unite="ngModel" minlength="3" required
+              [ngClass]="{'is-invalid': Unite.touched && !Unite.valid}" >
+              <div class="invalid-feedback">
+                <span *ngIf="Unite.hasError('required')">
+                  Unite Obligatoire
+                </span>
+                <span *ngIf="Unite.hasError('minlength')">
+                  Entrer au minimum 3 caracteres
+                </span>
+              </div>
+
+            </div>
+          </div>
+          <div class="col-2">
+            <div class="mb-3">
+              <label for=""  class="form-label text-white">save</label>
+              <button type="submit" name="" id="" class="form-control btn btn-primary"  placeholder="" aria-describedby="helpId">Save</button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="row">
+        <h4 class="card-title">Liste des Categories</h4>
+        <div class="table-responsive">
+          <div class="float-end mb-1">
+            <button name="" id="" [disabled]="dataRemove.length==0"  class="btn btn-danger btn-sm" role="button">Suprrimer</button>
+          </div>
+          <table class="table table-light">
+            <thead>
+              <tr>
+                <th scope="col" style="width: 10%;">
+                 <div class="form-check">
+                   <input [disabled]="!checkMode.checked" class="form-check-input" type="checkbox"
+                    id="check" #inputCheckAll (change)="onRemoveAll(inputCheckAll)">
+
+                 </div>
+              </th>
+                <th scope="col">Libelle</th>
+                <th scope="col">Unite</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="" *ngFor="let cat of dataList.data">
+                <td scope="row">
+                  <div class="form-check">
+                    <input [disabled]="!checkMode.checked" class="form-check-input" type="checkbox"
+                     id="" [checked]="dataList.data.length==dataRemove.length" (change)="onAddArrRemove($event,cat)"
+                     [checked]="checkAll">
+
+                  </div>
+                </td>
+                <td>{{ cat.libelle }}</td>
+                <td *ngFor="let r of cat.unite">{{ r.libelle}}</td>
+              </tr>
+
+            </tbody>
+          </table>
+          <nav aria-label="Page navigation example ">
+            <ul class="pagination pagination-sm float-end">
+              <li class="page-item " *ngFor="let link of dataList.links" [class.active]="link.active">
+                <a class="page-link text-black" href="javascript:void(0);"  (click)="onPaginate(link.url)">
+                  <span [innerHTML]="link.label"></span>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
